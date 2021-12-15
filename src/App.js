@@ -1,46 +1,60 @@
-// import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "./useForm"
+import { Hello } from "./Hello"
+import { useFetch } from "./useFetch"
 
 function App() {
-  // const [{ count, count2 }, setCount] = useState({ count: 10, count2: 20 });
 
-  // const [count, setCount] = useState(10);
-  // const [count2, setCount2] = useState(20);
+  const [values, handleChange] = useForm({ email: '', password: '', firstName: '' });
+  // const [showHello, setshowHello] = useState(true)
+  // useEffect(() => {
+  //   console.log('render');
+  // })
 
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
+  // useEffect(() => {
+  //   console.log('render');
+  // }, [values.password, values.email])
 
-  const [values, handleChange] = useForm({ email: '', password: '' });
+  // useEffect(() => {
+  //   console.log('render');
+  //   return () => {
+  //     console.log("unmount");
+  //   };
+  // }, [values.email])
 
+  // useEffect(() => {
+  //   const onMouseMove = e => {
+  //     console.log(e);
+  //   };
+  //   window.addEventListener('mousemove', onMouseMove)
+  //   console.log('added');
+  //   return () => {
+  //     console.log('removed');
+  //     window.removeEventListener('mousemove', onMouseMove)
+  //   };
+  // }, [])
+
+  // useEffect(() => { console.log('mount1'); }, [])
+  // useEffect(() => { console.log('mount2'); }, [])
+  const [count, setCount] = useState(() => JSON.parse(localStorage.getItem("count")))
+  const { data, loading } = useFetch(`http://numbersapi.com/${count}/trivia`)
+
+  useEffect(() => {
+    localStorage.setItem("count", JSON.stringify(count))
+  }, [count])
 
   return (
     <div>
-      {/* <button onClick={() =>
-        setCount(currentState => ({
-          ...currentState, count: currentState.count + 1
-        }))
-      }
-      >+</button> */}
-
-      {/* <button onClick={() =>
-        setCount(c => c + 1
-        )
-      }
-      >+</button>
-      <div>{count}</div>
-      <div>{count2}</div> */}
-
-      {/* <input
-        name="email"
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-      />
+      <div>{!data ? "loading..." : data}</div>
+      <div>count: {count}</div>
+      <button onClick={() => setCount(c => c + 1)}>increment</button>
+      {/* <button onClick={() => setshowHello(!showHello)}>toggle</button>
+      {showHello && <Hello />} */}
       <input
-        type="password"
-        name="password"
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-      /> */}
+        name="firstName"
+        value={values.firstName}
+        onChange={handleChange}
+      />
 
       <input
         name="email"
